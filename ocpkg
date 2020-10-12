@@ -787,7 +787,11 @@ if [ -a $BUILD_DIR/CMakeCache.txt ]; then
 fi
 MESSAGE="cmake -B$BUILD_DIR -H$SOURCE_DIR" ; message
 #stackoverflow.com/questions/20610255/how-to-tell-cmake-where-to-put-build-files
-cmake -B$BUILD_DIR -H$SOURCE_DIR
+if [ $BUILD_FOR_PYTHON_2 ]; then
+  (cd $BUILD_DIR ; cmake -DCMAKE_DISABLE_FIND_PACKAGE_Python3Interp=TRUE ..)
+else
+  cmake -B$BUILD_DIR -H$SOURCE_DIR
+fi
 MESSAGE="make -C $BUILD_DIR -j$MAKE_JOBS" ; message
 make -C $BUILD_DIR -j$MAKE_JOBS
 MESSAGE="Finished building source" ; message
@@ -849,11 +853,11 @@ install_opencog_github_repo ure
 
 # Install OpenCog
 install_opencog(){
-install_opencog_github_repo pln
-install_opencog_github_repo miner
-install_opencog_github_repo cogserver
 install_opencog_github_repo attention
 install_opencog_github_repo spacetime
+install_opencog_github_repo cogserver
+install_opencog_github_repo pln
+install_opencog_github_repo miner
 install_opencog_github_repo pattern-index
 install_opencog_github_repo visualization
 install_opencog_github_repo opencog
